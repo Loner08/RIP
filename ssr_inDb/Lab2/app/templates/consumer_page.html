@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <main class="container">
+        <div class="row">
+            <div class="col-6">
+                <img src="{{ consumer.image.url }}" class="consumer-image" alt=""/>
+            </div>
+            <div class="col-6 d-flex flex-md-column gap-md-3">
+                <h1>{{ consumer.name }}</h1>
+                <span>Описание: {{ consumer.description }}</span>
+                <span>Потребление: {{ consumer.power }} Вт</span>
+                <span>Категория: {{ consumer.category }}</span>
+                <a href="/" class="return-btn btn btn-primary my-4 w-25">
+                    Назад
+                </a>
+            </div>
+        </div>
+    </main>
+{% endblock content %}

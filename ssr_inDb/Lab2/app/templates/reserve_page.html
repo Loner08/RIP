@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <main class="container">
+        <h3 class="text-center">Черновой расчет запаса хода</h3>
+        <div class="form-group">
+            <label class="form-label">Температура наружного воздуха</label>
+            {% if reserve.temperature %}
+                <input placeholder="Введите температуру" disabled type="text" class="form-control" style="width: 250px"
+                       value="{{ reserve.temperature }}">
+            {% else %}
+                <input placeholder="Введите температуру" disabled type="text" class="form-control" style="width: 250px">
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label class="form-label">Рассчитанный запас хода</label>
+            {% if reserve.calculated_range %}
+                <input disabled type="text" class="form-control" style="width: 250px"
+                       value="{{ reserve.calculated_range }}">
+            {% else %}
+                <input placeholder="Еще не рассчитано" disabled type="text" class="form-control" style="width: 250px">
+            {% endif %}
+        </div>
+        {% if items|length > 0 %}
+            <h4 class="text-center">Потребители</h4>
+            <div class="cards-wrapper row">
+                {% for item in items %}
+                    <div class="card w-100 mb5">
+                        <div class="row g-0 align-items-center px-3">
+                            <div class="col-md-3 justify-content-center d-flex">
+                                <a href="/consumers/{{ item.consumer.id }}/">
+                                    <img src="{{ item.consumer.image.url }}" alt=""/>
+                                </a>
+                            </div>
+                            <div class="col-md-3 align-items-center d-flex flex-column">
+                                <p class="card-text text-muted">Название</p>
+                                <h5 class="card-title">{{ item.consumer.name }}</h5>
+                            </div>
+                            <div class="col-md-3 align-items-center d-flex flex-column">
+                                <p class="card-text text-muted">Потребление</p>
+                                <p class="card-text">{{ item.consumer.power }} Вт</p>
+                            </div>
+                            <div class="col-md-3 justify-content-center d-flex">
+                                <div class="form-group">
+                                    <label class="form-label">Процент потребления</label>
+                                    <input disabled type="text" class="form-control" style="width: 150px"
+                                           value="{{ item.percentage }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h4 class="text-center">Потребители еще не добавлены</h4>
+        {% endif %}
+        <form method="post" action="{% url 'delete_reserve' reserve.id %}"
+              class="d-flex justify-content-center">
+            {% csrf_token %}
+            <button class="btn btn-danger delete-draft-reserve-btn" type="submit" style="width: 125px">
+                Удалить
+            </button>
+        </form>
+    </main>
+{% endblock content %}
